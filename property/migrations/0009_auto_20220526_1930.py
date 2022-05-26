@@ -20,6 +20,11 @@ class Migration(migrations.Migration):
                     number_parse, phonenumbers.PhoneNumberFormat.INTERNATIONAL
                 )
                 number.save()
+            else:
+                number.owner_pure_phone = ''
+                number.save()
+
+
 
     operations = [
         migrations.RunPython(create_valid_phonenumber),
