@@ -50,7 +50,11 @@ class Flat(models.Model):
         blank=True,
         db_index=True)
     new_building = models.BooleanField('Новостройка', null=True, db_index=True)
-    like = models.ManyToManyField(User, related_name='liked_flats',blank=True, verbose_name='Кто лайкнул')
+    like = models.ManyToManyField(
+        User,
+        related_name='liked_flats',
+        blank=True,
+        verbose_name='Кто лайкнул')
 
     def __str__(self):
         return f'{self.town}, {self.address} ({self.price}р.)'
@@ -74,3 +78,19 @@ class Complaint(models.Model):
         verbose_name = 'Жалоба'
         verbose_name_plural = 'Жалобы'
 
+    def __str__(self):
+        return f'{self.user} {self.flat_complaint}'
+
+
+class Owner(models.Model):
+    owner = models.CharField(max_length=200, verbose_name='ФИО владельца')
+    owners_phonenumber = models.CharField('Номер владельца', max_length=20)
+    owner_pure_phone = PhoneNumberField('Нормализованный номер владельца', blank=True)
+    owner_flat = models.ManyToManyField(
+        Flat,
+        related_name='owner_flats',
+        verbose_name='Квартиры в собственности')
+
+    class Meta:
+        verbose_name = 'Собственник'
+        verbose_name_plural = 'Собственники'
