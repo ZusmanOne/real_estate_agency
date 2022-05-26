@@ -9,6 +9,7 @@ class FlatAdmin(admin.ModelAdmin):
     search_fields = ('town', 'town_district','address')
     readonly_fields = ('created_at',)
     list_filter = ('new_building',)
+    raw_id_fields = ('like',)
 
 
 class ComplaintAdmin(admin.ModelAdmin):
