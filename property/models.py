@@ -94,3 +94,6 @@ class Owner(models.Model):
     class Meta:
         verbose_name = 'Собственник'
         verbose_name_plural = 'Собственники'
+
+    def __str__(self):
+        return f'{self.owner}'
