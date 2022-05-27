@@ -1,6 +1,5 @@
 from django.contrib import admin
-
-from .models import Flat,Complaint,Owner
+from .models import Flat, Complaint, Owner
 
 
 class OwnerInline(admin.TabularInline):
@@ -9,9 +8,9 @@ class OwnerInline(admin.TabularInline):
 
 
 class FlatAdmin(admin.ModelAdmin):
-    list_display = ('id', 'address', 'price', 'new_building', 'construction_year', 'owner_pure_phone')
+    list_display = ('id', 'address', 'price', 'new_building', 'construction_year')
     list_editable = ('new_building',)
-    search_fields = ('town', 'town_district','address')
+    search_fields = ('town', 'town_district', 'address')
     readonly_fields = ('created_at',)
     list_filter = ('new_building',)
     raw_id_fields = ('like',)
