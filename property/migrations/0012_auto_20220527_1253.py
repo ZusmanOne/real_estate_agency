@@ -3,21 +3,23 @@
 from django.db import migrations
 
 
+def copy_owner_flat(apps, schema_editor):
+    Flat = apps.get_model('property', 'Flat')
+    Owner = apps.get_model('property', 'Owner')
+    flats = Flat.objects.all()
+    for flat in flats.iterator():
+        owner, created = Owner.objects.get_or_create(
+            owner=flat.owner,
+            owner_pure_phone=flat.pure_phonenumber,
+        )
+        owner.owner_flat.add(flat)
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
         ('property', '0011_auto_20220526_2127'),
     ]
-    def copy_owner_flat(apps, schema_editor):
-        Flat = apps.get_model('property', 'Flat')
-        Owner = apps.get_model('property', 'Owner')
-        flats = Flat.objects.all()
-        for flat in flats:
-            owner,created = Owner.objects.get_or_create(
-                owner=flat.owner,
-                owner_pure_phone=flat.owner_pure_phone,
-            )
-            owner.owner_flat.add(flat)
 
     operations = [
         migrations.RunPython(copy_owner_flat),

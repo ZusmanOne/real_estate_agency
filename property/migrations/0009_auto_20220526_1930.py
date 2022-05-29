@@ -4,27 +4,26 @@ from django.db import migrations
 import phonenumbers
 
 
+def create_valid_phonenumber(apps, schema_editor):
+    Flat = apps.get_model('property', 'Flat')
+    flat_phonenumbers = Flat.objects.all()
+    for number in flat_phonenumbers.iterator():
+        number_parse = phonenumbers.parse(number.owners_phonenumber, 'RU')
+        if phonenumbers.is_possible_number(number_parse) and phonenumbers.is_valid_number(number_parse):
+            number.owner_pure_phone = phonenumbers.format_number(
+                number_parse, phonenumbers.PhoneNumberFormat.INTERNATIONAL
+            )
+            number.save()
+        else:
+            number.owner_pure_phone = ''
+            number.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
         ('property', '0008_auto_20220526_1703'),
     ]
-
-    def create_valid_phonenumber(apps, schema_editor):
-        Flat = apps.get_model('property', 'Flat')
-        flat_phonenumbers = Flat.objects.all()
-        for number in flat_phonenumbers:
-            number_parse = phonenumbers.parse(number.owners_phonenumber, 'RU')
-            if phonenumbers.is_possible_number(number_parse) and phonenumbers.is_valid_number(number_parse):
-                number.owner_pure_phone = phonenumbers.format_number(
-                    number_parse, phonenumbers.PhoneNumberFormat.INTERNATIONAL
-                )
-                number.save()
-            else:
-                number.owner_pure_phone = ''
-                number.save()
-
-
 
     operations = [
         migrations.RunPython(create_valid_phonenumber),

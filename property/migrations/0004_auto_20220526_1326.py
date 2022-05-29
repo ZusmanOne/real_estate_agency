@@ -3,18 +3,19 @@
 from django.db import migrations
 
 
+def fill_field_new_building(apps, schema_editor):
+    Flat = apps.get_model('property', 'Flat')
+    new_build = Flat.objects.filter(construction_year__gte=2015)
+    for build in new_build:
+        build.new_building = True
+        build.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
         ('property', '0003_flat_new_building'),
     ]
-
-    def fill_field_new_building(apps, schema_editor):
-        Flat = apps.get_model('property', 'Flat')
-        new_build = Flat.objects.filter(construction_year__gte=2015)
-        for build in new_build:
-            build.new_building = True
-            build.save()
 
     operations = [
         migrations.RunPython(fill_field_new_building),
