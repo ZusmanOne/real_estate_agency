@@ -13,10 +13,9 @@ def create_valid_phonenumber(apps, schema_editor):
             number.owner_pure_phone = phonenumbers.format_number(
                 number_parse, phonenumbers.PhoneNumberFormat.INTERNATIONAL
             )
-            number.save()
         else:
             number.owner_pure_phone = ''
-            number.save()
+        number.save()
 
 
 class Migration(migrations.Migration):

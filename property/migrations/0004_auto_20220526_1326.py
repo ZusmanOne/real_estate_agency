@@ -5,8 +5,8 @@ from django.db import migrations
 
 def fill_field_new_building(apps, schema_editor):
     Flat = apps.get_model('property', 'Flat')
-    new_build = Flat.objects.filter(construction_year__gte=2015)
-    for build in new_build:
+    new_builds = Flat.objects.filter(construction_year__gte=2015)
+    for build in new_builds.iterator():
         build.new_building = True
         build.save()
 
